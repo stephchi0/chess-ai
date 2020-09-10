@@ -22,7 +22,7 @@ class Game extends JPanel implements MouseListener, MouseMotionListener {
         }
     };
 
-    public void mousePressed(MouseEvent e) {System.out.println(AI.depth);
+    public void mousePressed(MouseEvent e) {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 if (e.getX() > i * 50 && e.getX() < i * 50 + 50 && e.getY() > j * 50 && e.getY() < j * 50 + 50) {
