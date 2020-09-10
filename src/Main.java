@@ -25,10 +25,7 @@ public class Main {
     }
 }
 /*
-CREATE JAR FILE: 
-javac src/*.java
-jar cfm Chess.jar Manifest.txt src/*
-
+TO DO LIST
 check for checkmate/stalemate
 en passant can still leave u in check
 currently the move arrow only works for moves that arent castle or en passant
