@@ -9,18 +9,20 @@ class Game extends JPanel implements MouseListener, MouseMotionListener {
         super.paintComponent(g);        
         Board.show(g, this);
         
+        if (Board.numberOfPieces < 7) AI.depth = 7;
+        else if (Board.numberOfPieces < 16) AI.depth = 6;
         if (Board.turn == AI.player) SwingUtilities.invokeLater(AIMove);
     }
     Runnable AIMove = new Runnable() {
         public void run() {
-            AI.minimax(Board.position, Board.whitePieces, Board.blackPieces, AI.depth, Board.turn, -99999, 99999);
+            Board.eval = AI.minimax(Board.position, Board.whitePieces, Board.blackPieces, AI.depth, Board.turn, -99999, 99999);
             Board.selectedPiece = AI.pieceToMove;
             Board.movePiece(AI.coordinateToMoveTo[0], AI.coordinateToMoveTo[1]);
             repaint();
         }
     };
 
-    public void mousePressed(MouseEvent e) {
+    public void mousePressed(MouseEvent e) {System.out.println(AI.depth);
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 if (e.getX() > i * 50 && e.getX() < i * 50 + 50 && e.getY() > j * 50 && e.getY() < j * 50 + 50) {
@@ -45,7 +47,7 @@ class Game extends JPanel implements MouseListener, MouseMotionListener {
     }
     public void mouseReleased(MouseEvent e) {
         Board.dragged = false;
-        if (Board.selectedPiece != null &&//if you release mouse on top of its original square, it uses double click control
+        if (Board.selectedPiece != null && e.getX() <= 400 && e.getY() <= 400 &&//if you release mouse on top of its original square, it uses double click control
         !(e.getX() >= Board.selectedPiece.x*50 && e.getX() <= Board.selectedPiece.x*50+50 && e.getY() >= Board.selectedPiece.y*50 && e.getY() <= Board.selectedPiece.y*50+50)) {
             Board.movePiece(e.getX()/50, e.getY()/50);
         }

@@ -8,6 +8,7 @@ public class Board {
     static Piece[] blackPieces = new Piece[16];
     static King whiteKing;
     static King blackKing;
+    static int numberOfPieces = 32;
     
     static Piece selectedPiece = null;
     static int turn = 1;
@@ -20,6 +21,9 @@ public class Board {
     static boolean dragged = false;
     static int dragX = -1;
     static int dragY = -1;
+
+    //for displaying what the ai thinks of the position
+    static double eval = 0;
 
     static void initializeBoard() {//adds pieces to arrays
         for (int i = 0; i < 8; i++) {
@@ -59,7 +63,7 @@ public class Board {
         }
         
         //show selected piece
-        if (selectedPiece != null && !dragged) {
+        if (selectedPiece != null) {
             g.setColor(Color.yellow);
             g.fillRect(selectedPiece.x*50, selectedPiece.y*50, 50, 50);
         }
@@ -93,6 +97,23 @@ public class Board {
             g.drawString(Integer.toString(i), 410, 425-i*50);
             g.drawString(String.valueOf((char)(i + 64)), i*50-30, 420);
         }
+
+        //eval bar
+        if (Math.abs(eval) < 9000) {//if ai doesn't find a forced win
+            int length = (int)(Math.min(380, 195+eval*25));
+            g.setColor(Color.black);
+            g.fillRect(450, 15, 30, 380);
+            g.setColor(Color.white);
+            g.fillRect(450, 5, 30, length);
+        }
+        else {//completely lost position, forced win found
+            if (eval > 0) g.setColor(Color.white);
+            else g.setColor(Color.black);
+            g.fillRect(450, 5, 30, 390);
+        }
+        g.setColor(Color.gray);
+        ((Graphics2D)g).setStroke(new BasicStroke(2));
+        g.drawRect(450, 5, 30, 390);
     }
 
     static Piece pieceAt(int x, int y) {//returns piece found at coordinates
@@ -168,11 +189,20 @@ public class Board {
     static void movePiece(int newX, int newY) {
         clearEnPassantable(turn);//en passant opportunity only lasts one turn, resets after
         if (selectedPiece instanceof King && ((King)selectedPiece).castle(newX, newY) != 0) {//castling
+            //for move arrow
+            previousPosition[0] = selectedPiece.x; previousPosition[1] = selectedPiece.y;
+            newPosition[0] = newX; newPosition[1] = newY;
+
             castle(selectedPiece.player, ((King)selectedPiece).castle(newX, newY));
             turn = -turn;
         }
         else if (selectedPiece instanceof Pawn && ((Pawn)selectedPiece).canCaptureEnPassant(newX, newY)) {//capturing en passant
+            //for move arrow
+            previousPosition[0] = selectedPiece.x; previousPosition[1] = selectedPiece.y;
+            newPosition[0] = newX; newPosition[1] = newY;
+
             captureEnPassant((Pawn)selectedPiece, newX, newY);
+            numberOfPieces--;
             turn = -turn;
         }
         else if (selectedPiece.legalMove(newX, newY)) {//every other move besides castling or capturing en passant
@@ -180,7 +210,10 @@ public class Board {
             previousPosition[0] = selectedPiece.x; previousPosition[1] = selectedPiece.y;
             newPosition[0] = newX; newPosition[1] = newY;
 
-            if (!emptyAt(newX, newY)) pieceAt(newX, newY).captured = true;//captures piece
+            if (!emptyAt(newX, newY)) {//captures piece
+                pieceAt(newX, newY).captured = true;
+                numberOfPieces--;
+            }
 
             if (selectedPiece instanceof King) ((King)selectedPiece).castleLegal = false;//castling becomes illegal if king or rook moves
             if (selectedPiece instanceof Rook) ((Rook)selectedPiece).castleLegal = false;

@@ -149,7 +149,12 @@ public class AI {
                 }
             }
         }
-        if (!moveFound && !Board.inCheck(player)) return 0;//stalemate
+        if (!moveFound) {
+            if (Board.inCheck(player))//checkmate
+                return -9999*player;
+            else//stalemate
+                return 0;
+        }
         return bestEval;
     }
 }
