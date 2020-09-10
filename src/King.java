@@ -1,5 +1,6 @@
 package src;
 import java.util.ArrayList;
+
 public class King extends Piece {
     boolean castleLegal = true;
     boolean castled = false;

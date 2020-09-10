@@ -1,5 +1,6 @@
 package src;
 import java.util.ArrayList;
+
 public class AI { 
     static int player = -1;//1 is white, -1 is black
 

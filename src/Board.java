@@ -1,6 +1,7 @@
 package src;
 import java.awt.*;
 import java.awt.image.*;
+
 public class Board {
     static Piece[][] position = new Piece[8][8];
     static Piece[] whitePieces = new Piece[16];
