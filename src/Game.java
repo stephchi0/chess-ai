@@ -23,20 +23,18 @@ class Game extends JPanel implements MouseListener, MouseMotionListener {
     };
 
     public void mousePressed(MouseEvent e) {
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                if (e.getX() > i * 50 && e.getX() < i * 50 + 50 && e.getY() > j * 50 && e.getY() < j * 50 + 50) {
-                    if (Board.selectedPiece != null && Board.selectedPiece.x == i && Board.selectedPiece.y == j)//deselect
-                        Board.selectedPiece = null;
-                    else if (Board.selectedPiece != null && Board.pieceAt(i, j) != null && Board.pieceAt(i, j).player != Board.selectedPiece.player) {//move piece if one is selected
-                        Board.movePiece(i, j);
-                        Board.dragged = false;
-                    }
-                    else {//select the piece clicked
-                        Board.selectPiece(i, j);
-                        Board.dragged = (Board.selectedPiece != null);
-                    }
-                }
+        int inputX = e.getX()/50;
+        int inputY = e.getY()/50;
+        if (inputX >= 0 && inputX <= 7 && inputY >= 0 && inputY <= 7) {
+            if (Board.selectedPiece != null && inputX == Board.selectedPiece.x && inputY == Board.selectedPiece.y)//deselect by clicking on selected piece again
+                Board.selectedPiece = null;
+            else if (Board.selectedPiece != null && (Board.pieceAt(inputX, inputY) == null || Board.pieceAt(inputX, inputY).player != Board.selectedPiece.player)) {//move piece if one is selected
+                Board.movePiece(inputX, inputY);
+                Board.dragged = false;
+            }
+            else {//select the piece clicked
+                Board.selectPiece(inputX, inputY);
+                Board.dragged = (Board.selectedPiece != null);
             }
         }
         if (Board.dragged) {
@@ -46,12 +44,16 @@ class Game extends JPanel implements MouseListener, MouseMotionListener {
         repaint();
     }
     public void mouseReleased(MouseEvent e) {
-        Board.dragged = false;
-        if (Board.selectedPiece != null && e.getX() <= 400 && e.getY() <= 400 &&//if you release mouse on top of its original square, it uses double click control
-        !(e.getX() >= Board.selectedPiece.x*50 && e.getX() <= Board.selectedPiece.x*50+50 && e.getY() >= Board.selectedPiece.y*50 && e.getY() <= Board.selectedPiece.y*50+50)) {
-            Board.movePiece(e.getX()/50, e.getY()/50);
+        if (Board.dragged) {
+            int inputX = e.getX()/50;
+            int inputY = e.getY()/50;
+            if (Board.selectedPiece != null && inputX < 8 && inputY < 8 &&//if you release mouse on top of its original square, it uses double click control
+            !(inputX == Board.selectedPiece.x && inputY == Board.selectedPiece.y)) {
+                Board.movePiece(e.getX()/50, e.getY()/50);
+            }
+            Board.dragged = false;
+            repaint();
         }
-        repaint();
     }
     public void mouseExited(MouseEvent e){}
     public void mouseClicked(MouseEvent e){}

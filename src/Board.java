@@ -88,8 +88,18 @@ public class Board {
         for (Piece blackPiece : blackPieces) {
             if (!dragged || blackPiece != selectedPiece) blackPiece.show(g, imageObserver);
         }
+
+        //display possible moves
+        if (selectedPiece != null) {
+            g.setColor(Color.gray);
+            for (int[] coordinates : selectedPiece.getLegalMoves()) {
+                g.fillOval(coordinates[0]*50+20, coordinates[1]*50+20, 10, 10);
+            }
+        }
+
+        //display selected piece being dragged and dropped
         if (selectedPiece != null && dragged) selectedPiece.show(dragX, dragY, g, imageObserver);
-        
+
         //side labels
         g.setColor(Color.black);
         g.setFont(new Font("Trebuchet MS", Font.BOLD, 16));
@@ -185,6 +195,8 @@ public class Board {
     static void selectPiece(int x, int y) {
         if (!emptyAt(x, y) && pieceAt(x, y).player == turn)
             selectedPiece = pieceAt(x, y);
+        else
+            selectedPiece = null;
     }
     static void movePiece(int newX, int newY) {
         clearEnPassantable(turn);//en passant opportunity only lasts one turn, resets after

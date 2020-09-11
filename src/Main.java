@@ -9,7 +9,7 @@ public class Main {
         final JPanel panel = new JPanel();
         final Game chess = new Game();
 
-        frame.setSize(600, 475);
+        frame.setSize(525, 475);
         frame.setResizable(false);
         frame.setContentPane(panel);
 
@@ -17,7 +17,7 @@ public class Main {
         panel.add(chess);
         panel.addMouseListener(chess);
         panel.addMouseMotionListener(chess);
-        chess.setBounds(0, 0, 600, 475);
+        chess.setBounds(0, 0, 525, 475);
         
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
