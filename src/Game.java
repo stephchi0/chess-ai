@@ -9,13 +9,13 @@ class Game extends JPanel implements MouseListener, MouseMotionListener {
         super.paintComponent(g);        
         Board.show(g, this);
         
-        if (Board.numberOfPieces < 7) AI.depth = 7;
-        else if (Board.numberOfPieces < 16) AI.depth = 6;
+        if (Board.numberOfPieces < 7) AI.maxDepth = 7;
+        else if (Board.numberOfPieces < 16) AI.maxDepth = 6;
         if (Board.turn == AI.player) SwingUtilities.invokeLater(AIMove);
     }
     Runnable AIMove = new Runnable() {
         public void run() {
-            Board.eval = AI.minimax(Board.position, Board.whitePieces, Board.blackPieces, AI.depth, Board.turn, -99999, 99999);
+            Board.eval = AI.minimax(Board.position, Board.whitePieces, Board.blackPieces, AI.maxDepth, Board.turn, -99999, 99999);
             Board.selectedPiece = AI.pieceToMove;
             Board.movePiece(AI.coordinateToMoveTo[0], AI.coordinateToMoveTo[1]);
             repaint();

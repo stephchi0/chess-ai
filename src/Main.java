@@ -35,4 +35,5 @@ allow board to be flipped
 implement draw by repetition, draw by insufficient material, draw by not capturing for 50 moves**
 minimax currently may think it can take a piece thats defended at depth 0
 add restart button and end game screen**
+maybe add number of squares a piece controls to its evaluation
 */

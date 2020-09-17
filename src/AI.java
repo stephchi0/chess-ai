@@ -31,7 +31,7 @@ public class AI {
 
     static Piece pieceToMove;
     static int[] coordinateToMoveTo;
-    static int depth = 5;
+    static int maxDepth = 5;
     static double minimax(Piece[][] position, Piece[] whitePieces, Piece[] blackPieces, int currentDepth, int player, double alpha, double beta) {
         if (currentDepth == 0) return positionEvaluation(whitePieces, blackPieces);//ends recursion once max depth is reached
 
@@ -53,7 +53,7 @@ public class AI {
                     Piece targetSquare = position[targetX][targetY];
 
                     //guarantees one of the legal moves will be played by picking the first legal move
-                    if (!moveFound && currentDepth == depth) {
+                    if (!moveFound && currentDepth == maxDepth) {
                         moveFound = true;
                         pieceToMove = selectedPiece;
                         coordinateToMoveTo = coordinates;
@@ -103,7 +103,7 @@ public class AI {
                     if (player == 1 && eval > bestEval || player == -1 && eval < bestEval) {
                         moveFound = true;
                         bestEval = eval;
-                        if (currentDepth == depth) {
+                        if (currentDepth == maxDepth) {
                             pieceToMove = selectedPiece;
                             coordinateToMoveTo = coordinates;
                         }
@@ -151,7 +151,7 @@ public class AI {
         }
         if (!moveFound) {
             if (Board.inCheck(player))//checkmate
-                return -9999*player;
+                return (-9999-currentDepth)*player;
             else//stalemate
                 return 0;
         }
