@@ -16,14 +16,14 @@ public class King extends Piece {
                 Board.pieceAt(5, y) == null && Board.pieceAt(6, y) == null && //no pieces in between
                 Board.pieceAt(7, y) instanceof Rook && ((Rook)Board.pieceAt(7, y)).castleLegal && //pieces haven't moved
                 !Board.inCheck(player) && //not in check
-                !Board.squareAttacked(-player, 5, y) && !Board.squareAttacked(-player, 6, y) && !Board.squareAttacked(-player, 7, y)//squares aren't attacked
+                !Board.squareAttacked(-player, 5, y) && !Board.squareAttacked(-player, 6, y)//squares aren't attacked
             ) return 1;//if all of the above are true then kingside castle
 
             else if ((newX == 0 || newX == 2) && //input for queenside castle
                 Board.pieceAt(3, y) == null && Board.pieceAt(2, y) == null && Board.pieceAt(1, y) == null && //no pieces in between
                 Board.pieceAt(0, y) instanceof Rook && ((Rook)Board.pieceAt(0, y)).castleLegal && //pieces haven't moved
                 !Board.inCheck(player) && //not in check
-                !Board.squareAttacked(-player, 3, y) && !Board.squareAttacked(-player, 2, y) && !Board.squareAttacked(-player, 1, y) && !Board.squareAttacked(-player, 0, y)//squares aren't attacked
+                !Board.squareAttacked(-player, 3, y) && !Board.squareAttacked(-player, 2, y)//squares aren't attacked
             ) return -1;//if all of the above are true then queenside castle
         }
         return 0;
